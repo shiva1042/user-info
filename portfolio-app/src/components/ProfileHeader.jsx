@@ -1,4 +1,4 @@
-function ProfileHeader({ headerFields, basicInfo, template }) {
+function ProfileHeader({ headerFields, basicInfo, template, profilePhoto }) {
   const badge = headerFields.find((field) => field.label.toLowerCase() === 'badge')
   const displayName = headerFields.find(
     (field) => field.label.toLowerCase() === 'display name',
@@ -15,28 +15,39 @@ function ProfileHeader({ headerFields, basicInfo, template }) {
     .map((item) => item.trim())
     .filter(Boolean)
 
+  const nameValue =
+    displayName?.visible && displayName.value
+      ? displayName.value
+      : fallbackName?.value || ''
+
   return (
     <header
       className={`profile-header profile-header-${template.headerLayout}`}
       style={{ borderColor: template.dividerColor }}
+      role="banner"
     >
-      <div>
-        {badge?.visible && badge.value ? <p className="preview-label">{badge.value}</p> : null}
-        {(displayName?.visible && displayName.value) || fallbackName?.value ? (
-          <h1>
-            {displayName?.visible && displayName.value
-              ? displayName.value
-              : fallbackName?.value || ''}
-          </h1>
+      <div className="profile-header-main">
+        {profilePhoto ? (
+          <img
+            className="profile-avatar"
+            src={profilePhoto}
+            alt={`${nameValue}'s profile photo`}
+          />
         ) : null}
-        {headline?.visible && headline.value ? (
-          <p className="preview-subtitle">{headline.value}</p>
-        ) : null}
+        <div>
+          {badge?.visible && badge.value ? (
+            <p className="preview-label" aria-label="Badge">{badge.value}</p>
+          ) : null}
+          {nameValue ? <h1>{nameValue}</h1> : null}
+          {headline?.visible && headline.value ? (
+            <p className="preview-subtitle">{headline.value}</p>
+          ) : null}
+        </div>
       </div>
       <div className="profile-header-side">
         {sideNote?.visible && sideNote.value ? <p>{sideNote.value}</p> : null}
         {contact.length ? (
-          <ul className="contact-chip-list">
+          <ul className="contact-chip-list" aria-label="Contact information">
             {contact.map((item) => (
               <li key={item}>{item}</li>
             ))}

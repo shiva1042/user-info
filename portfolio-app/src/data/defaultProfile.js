@@ -2,6 +2,7 @@ const defaultProfile = {
   selectedMode: 'general',
   selectedTemplate: 'template1',
   hideEmptyFields: true,
+  profilePhoto: null,
   profile: {
     header: [
       {
